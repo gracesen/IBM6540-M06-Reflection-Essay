@@ -1,0 +1,109 @@
+---
+title: "M06-Reflection Essay-Advanced Data Wrangling"
+author: "Grace Sen"
+date: today
+format: 
+  html: 
+    toc: true
+    toc-depth: 4
+    number-sections: true
+    code-link: true
+    embed-resources: true
+editor: visual
+execute: 
+  freeze: auto
+---
+
+# Step 1 Reflection
+
+> *In **Step 1**, you learned how to design stunning presentation slides with Quarto. What's your impression of the Revealjs presentation? Describe its capabilities as you learned from the presentations. What are its strengths and weaknesses compared with PPT?*
+
+Before this assignment, I had never used Revealjs, so I was not sure what to expect. After building my own presentation, I was surprised by how well it combines R code, analysis, and slides in a single Quarto document. I especially liked being able to generate charts directly from my dataset because I didn't have to save images or copy them into the slides manually. I also liked that I could customize the presentation with a theme, CSS, and features like the table of contents and slide transitions, which made it look much more polished.
+
+Compared with PowerPoint, I think Revealjs is a better choice for data analysis projects because everything stays connected. If I update my data or code, I can simply render the presentation again and all the charts update automatically. That makes it much more easier to keep the presentation accurate. However, Revealjs definitely has a steeper learning curve. I spent quite a bit of time learning the YAML settings, CSS, and slide layout before I was happy with my final result, whereas PowerPoint is much easier to use right away.
+
+Even though Revealjs took more effort to learn, I think it was worth it. By the end of the assignment, I felt more comfortable using Quarto to create professional presentations, and I can see myself using Revealjs again for future analytics projects.
+
+# Step 2 Reflection
+
+> *In **Step 2**, you were asked to create a Revealjs presentation. Provide a link to the presentation you published on the web.  Add at least one reproducible chart or table in the presentation. Briefly describe what the presentation is about. What did you learn from the experience of the Revealjs presentation?*
+
+## About the Presentation
+
+My Revealjs presentation introduces my proposed CEP project: ***"How Do Price and Brand Influence Perfume Sales on eBay?"***. It explains the business problem, analytics objective, dataset, proposed analytics methods, and expected business value. I also included a reproducible bar chart showing the top 10 perfume brands by total units sold to illustrate the sales patterns in the dataset.
+
+## What I Learned
+
+Creating the presentation helped me understand how Revealjs combines R code, analysis, and presentation in one document. I liked that the chart was generated directly from the dataset, so it updates automatically whenever the data changes. Compared with PowerPoint, Revealjs required more setup, but it made the presentation easier to maintain and reproduce because the analysis and slides are stored in the same file.
+
+## Presentation Link Published on GitHub
+
+<https://gracesen.github.io/IBM6540-M06-1/>
+
+# Step 3 Reflection
+
+> *My advanced wrangling lecture in **Step 3** introduced new concepts, including how to join relational databases. Pick three different functions, each from a different category. Describe when to use them and give one coding example along with an output for each function. To clarify, you are expected to do literate programming to weave your narratives with the code.*
+
+## Advanced Wrangling 
+
+### `left_join()`
+
+**When to use?** I would use `left_join()` when related information is stored in separate tables and I want to combine them using a common key.
+
+For example, customer information may be stored in one table while purchase history is stored in another. `left_join()` keeps all rows from the first table and adds matching information from the second table.
+
+```{r}
+library(dplyr)
+
+customers <- tibble(
+  customer_id = c(1, 2, 3),
+  name = c("Alice", "Bob", "Carol")
+)
+
+orders <- tibble(
+  customer_id = c(1, 2),
+  amount = c(120, 250)
+)
+
+left_join(customers, orders, by = "customer_id")
+```
+
+**Interpretation**: The output keeps all customers, even those without matching orders. Since Carol has no purchase record, her `amount` is shown as `NA`.
+
+### `across()`
+
+**When to use?** I use `across()` when I want to apply the same calculation to multiple columns instead of writing separate code for each variable. This makes the code shorter and easier to maintain.
+
+```{r}
+mtcars |>
+  summarise(
+    across(
+      c(mpg, hp),
+      mean
+    )
+  )
+```
+
+**Interpretation**: `across()` calculated the mean of both `mpg` and `hp` in one command, making the code more efficient than calculating each mean separately.
+
+### `case_when()`
+
+**When to use?** I use `case_when()` when I need to create categories based on multiple conditions. It is useful for grouping observations into meaningful categories.
+
+```{r}
+tibble(score = c(95, 82, 74, 61)) |>
+  mutate(
+    grade = case_when(
+      score >= 90 ~ "A",
+      score >= 80 ~ "B",
+      score >= 70 ~ "C",
+      TRUE ~ "D"
+    )
+  )
+```
+
+**Interpretation:** `case_when()` grouped the scores into letter grades based on the conditions that were specified. It is much easier to read than using several nested `if_else()` statements.
+
+## Why I chose these functions
+
+I chose these three functions because they solve different types of data wrangling tasks. `left_join()` combines information from multiple tables, `across()` performs the same operation on several columns, and `case_when()` creates new categories based on conditions. Together, they represent common techniques that I expect to use in future data analysis projects.
